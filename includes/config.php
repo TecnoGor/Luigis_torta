@@ -5,7 +5,7 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_CHARSET', 'utf8mb4');
 
-define('SITE_NAME', 'Tu Yango Repostero');
+define('SITE_NAME', "Luigi's Tortas");
 define('SITE_URL', 'http://localhost/Catalogo_reposteria');
 define('ADMIN_URL', SITE_URL . '/admin');
 

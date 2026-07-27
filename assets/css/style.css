@@ -4,14 +4,15 @@
     --primary-dark: #880e4f;
     --primary-luigi: #22B24C;
     --secondary-luigi: #2B5293;
+    --third-luigi: #0f6407;
     --secondary: #f57c00;
     --accent: #ffca28;
-    --bg: #fdf6f0;
+    --bg: #aed1ad;
     --bg-card: #ffffff;
     --text: #3e2723;
     --text-light: #795548;
     --text-muted: #a1887f;
-    --border: #f0e0d6;
+    --border: #1f0c01;
     --shadow: 0 2px 12px rgba(62, 39, 35, 0.08);
     --shadow-lg: 0 8px 32px rgba(62, 39, 35, 0.12);
     --radius: 16px;
@@ -43,7 +44,7 @@ body {
 .site-header {
     background: linear-gradient(135deg, var(--primary-luigi), var(--secondary-luigi));
     color: white;
-    padding: 16px 0;
+    padding: 0 0;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -67,6 +68,13 @@ body {
 .brand-icon {
     font-size: 2.2rem;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.brand-icon-logo {
+    display: block;
+    width: 7vw;
 }
 
 .brand-name {
@@ -105,7 +113,7 @@ body {
 
 /* Hero */
 .hero {
-    background: linear-gradient(160deg, var(--primary-luigi) 0%, var(--primary-luigi) 50%, var(--secondary-luigi) 100%);
+    background: linear-gradient(160deg, var(--third-luigi) 0%, var(--primary-luigi) 50%, var(--secondary-luigi) 100%);
     color: white;
     padding: 60px 0 50px;
     text-align: center;
@@ -487,11 +495,23 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    background: linear-gradient(135deg, var(--third-luigi), var(--primary-luigi));
     padding: 20px;
 }
 
+.login-luigis {
+    z-index: 50;
+    position: absolute;
+    width: 60vw;
+    height: 60vh;
+    bottom: 0;
+    left: -10vw;
+    background-image: url('../images/Luigis_Torta_woutBack.png');
+    background-size: contain;
+}
+
 .login-card {
+    z-index: 1000;
     background: white;
     border-radius: var(--radius);
     padding: 40px;
@@ -565,7 +585,7 @@ body {
 }
 
 .btn-primary {
-    background: var(--primary);
+    background: var(--third-luigi);
     color: white;
     width: 100%;
     justify-content: center;
@@ -615,7 +635,7 @@ body {
 
 .admin-sidebar {
     width: 260px;
-    background: var(--primary-dark);
+    background: var(--third-luigi);
     color: white;
     padding: 20px 0;
     position: fixed;

@@ -30,14 +30,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../assets/images/favico.png" type="image/x-icon">
     <title>Iniciar Sesión - <?= SITE_NAME ?></title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-<div class="login-wrapper">
+    <div class="login-wrapper">
+    <div class="login-luigis"></div>
     <div class="login-card">
-        <div style="font-size:2.5rem;margin-bottom:8px;">&#127856;</div>
+        <div style="display: flex; justify-content: center; align-content: center;"><img class="brand-icon-logo" src="../assets/images/Luigis_torta_logo.png"></div>
         <h1><?= SITE_NAME ?></h1>
         <p class="login-sub">Panel de Administración</p>
 

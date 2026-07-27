@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= SITE_NAME ?> - Catálogo de Repostería</title>
+    <link rel="icon" href="assets/images/favico.png" type="image/x-icon">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -15,9 +16,11 @@
     <div class="container">
         <div class="header-content">
             <div class="brand">
-                <div class="brand-icon">&#127856;</div>
+                <div class="brand-icon">
+                    <img class="brand-icon-logo" src="assets/images/Luigis_torta_logo.png">
+                </div>
                 <div>
-                    <h1 class="brand-name">Tu Yango Repostero</h1>
+                    <h1 class="brand-name">Luigi's Tortas</h1>
                     <p class="brand-tagline">Dulces momentos, creados con amor</p>
                 </div>
             </div>
