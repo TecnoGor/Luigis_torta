@@ -6,7 +6,7 @@ define('DB_PASS', '');
 define('DB_CHARSET', 'utf8mb4');
 
 define('SITE_NAME', "Luigi's Tortas");
-define('SITE_URL', 'http://localhost/Catalogo_reposteria');
+define('SITE_URL', 'http://localhost/Luigis_torta');
 define('ADMIN_URL', SITE_URL . '/admin');
 
 define('UPLOAD_DIR', __DIR__ . '/../assets/images/products/');

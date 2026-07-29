@@ -4,6 +4,7 @@ requireLogin();
 
 $id = $_GET['id'] ?? null;
 $deleteId = $_GET['delete'] ?? null;
+$deleteSabor = $_GET['deletesabor'] ?? null;
 $producto = null;
 $errors = [];
 
@@ -19,12 +20,65 @@ if ($deleteId) {
     exit;
 }
 
+// Eliminar sabor
+if ($deleteSabor && $id) {
+    $sabor = getSabor($deleteSabor);
+    if ($sabor && $sabor['producto_id'] == $id) {
+        if ($sabor['imagen']) {
+            $imgPath = UPLOAD_DIR . $sabor['imagen'];
+            if (file_exists($imgPath)) unlink($imgPath);
+        }
+        execute('DELETE FROM producto_sabores WHERE id = ?', [$deleteSabor]);
+        flash('success', 'Sabor eliminado correctamente');
+    }
+    header('Location: ' . ADMIN_URL . '/producto_form.php?id=' . $id);
+    exit;
+}
+
 // Cargar producto existente
 if ($id) {
     $producto = getProducto($id);
     if (!$producto) {
         header('Location: ' . ADMIN_URL . '/productos.php');
         exit;
+    }
+}
+
+// Agregar sabor
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_sabor']) && $id) {
+    $saborNombre = trim($_POST['sabor_nombre'] ?? '');
+    $saborPrecio = (float)($_POST['sabor_precio'] ?? 0);
+    $saborStock = (int)($_POST['sabor_stock'] ?? 0);
+    $saborOrden = (int)($_POST['sabor_orden'] ?? 0);
+
+    if (empty($saborNombre)) {
+        $errors[] = 'El nombre del sabor es requerido';
+    } else {
+        $saborData = [
+            'producto_id' => $id,
+            'nombre' => $saborNombre,
+            'precio' => $saborPrecio,
+            'stock' => $saborStock,
+            'orden' => $saborOrden,
+        ];
+
+        if (!empty($_FILES['sabor_imagen']['name'])) {
+            $filename = uploadImage($_FILES['sabor_imagen']);
+            if ($filename) {
+                $saborData['imagen'] = $filename;
+            } else {
+                $errors[] = 'Error al subir la imagen del sabor. Usa JPG, PNG, GIF o WebP.';
+            }
+        }
+
+        if (empty($errors)) {
+            $cols = implode(', ', array_keys($saborData));
+            $vals = implode(', ', array_fill(0, count($saborData), '?'));
+            insertId("INSERT INTO producto_sabores ($cols) VALUES ($vals)", array_values($saborData));
+            flash('success', 'Sabor agregado correctamente');
+            header('Location: ' . ADMIN_URL . '/producto_form.php?id=' . $id);
+            exit;
+        }
     }
 }
 
@@ -217,6 +271,81 @@ $isEdit = $id && $producto;
                 </div>
             </form>
         </div>
+
+        <?php if ($isEdit): $sabores = getSaboresByProducto($id); ?>
+        <div class="form-card" style="margin-top:24px;">
+            <h3>&#127855; Sabores / Variedades</h3>
+
+            <?php if (count($sabores) > 0): ?>
+            <div class="data-table-wrapper" style="margin-bottom:20px;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Orden</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($sabores as $s): ?>
+                        <tr>
+                            <td>
+                                <?php if ($s['imagen']): ?>
+                                    <img src="<?= UPLOAD_URL . $s['imagen'] ?>" alt="" class="image-preview">
+                                <?php else: ?>
+                                    <div class="image-preview-placeholder">&#127856;</div>
+                                <?php endif; ?>
+                            </td>
+                            <td><strong><?= sanitize($s['nombre']) ?></strong></td>
+                            <td><?= formatCurrency($s['precio']) ?></td>
+                            <td><span class="stock-badge <?= $s['stock'] == 0 ? 'out' : ($s['stock'] <= 3 ? 'low' : 'ok') ?>"><?= $s['stock'] ?></span></td>
+                            <td><?= $s['orden'] ?></td>
+                            <td>
+                                <a href="producto_form.php?id=<?= $id ?>&deletesabor=<?= $s['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Eliminar sabor «<?= sanitize($s['nombre']) ?>»?')">Eliminar</a>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php else: ?>
+            <p style="color:var(--text-muted);margin-bottom:16px;">Este producto no tiene sabores/variedades registradas.</p>
+            <?php endif; ?>
+
+            <hr style="border:none;border-top:1px solid var(--border);margin:16px 0;">
+
+            <h4 style="margin-bottom:12px;">Agregar nuevo sabor</h4>
+            <form method="POST" enctype="multipart/form-data" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <input type="hidden" name="add_sabor" value="1">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Nombre *</label>
+                    <input type="text" name="sabor_nombre" required placeholder="Ej: Chocolate, Vainilla...">
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Precio ($)</label>
+                    <input type="number" name="sabor_precio" step="0.01" min="0" value="0.00">
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Stock</label>
+                    <input type="number" name="sabor_stock" min="0" value="0">
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Orden</label>
+                    <input type="number" name="sabor_orden" min="0" value="0">
+                </div>
+                <div class="form-group" style="margin-bottom:0;grid-column:span 2;">
+                    <label>Imagen del sabor</label>
+                    <input type="file" name="sabor_imagen" accept="image/*">
+                </div>
+                <div style="grid-column:span 2;margin-top:4px;">
+                    <button type="submit" class="btn btn-success" style="width:auto;">+ Agregar Sabor</button>
+                </div>
+            </form>
+        </div>
+        <?php endif; ?>
     </main>
 </div>
 <script src="../assets/js/app.js"></script>

@@ -45,6 +45,19 @@ CREATE TABLE IF NOT EXISTS usuarios (
 ) ENGINE=InnoDB;
 
 -- Tabla de historial de inventario
+-- Tabla de sabores/variedades por producto
+CREATE TABLE IF NOT EXISTS producto_sabores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    producto_id INT NOT NULL,
+    nombre VARCHAR(150) NOT NULL,
+    precio DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    stock INT NOT NULL DEFAULT 0,
+    imagen VARCHAR(255) DEFAULT NULL,
+    orden INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (producto_id) REFERENCES productos(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS historial_inventario (
     id INT AUTO_INCREMENT PRIMARY KEY,
     producto_id INT NOT NULL,

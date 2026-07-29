@@ -63,7 +63,7 @@
         <h2 class="section-title">&#11088; Destacados</h2>
         <div class="products-grid">
             <?php foreach (getProductos(null, null, true) as $p): ?>
-                <div class="product-card featured" data-categoria="<?= $p['categoria_id'] ?>">
+                <div class="product-card featured" data-categoria="<?= $p['categoria_id'] ?>" data-id="<?= $p['id'] ?>">
                     <div class="product-badge">Destacado</div>
                     <div class="product-image">
                         <?php if ($p['imagen']): ?>
@@ -96,7 +96,7 @@
         <h2 class="section-title">Catálogo Completo</h2>
         <div class="products-grid" id="productos-grid">
             <?php foreach (getProductos() as $p): ?>
-                <div class="product-card" data-categoria="<?= $p['categoria_id'] ?>" data-nombre="<?= strtolower($p['nombre'] . ' ' . $p['descripcion']) ?>">
+                <div class="product-card" data-categoria="<?= $p['categoria_id'] ?>" data-nombre="<?= strtolower($p['nombre'] . ' ' . $p['descripcion']) ?>" data-id="<?= $p['id'] ?>">
                     <div class="product-image">
                         <?php if ($p['imagen']): ?>
                             <img src="<?= UPLOAD_URL . $p['imagen'] ?>" alt="<?= sanitize($p['nombre']) ?>">
@@ -156,6 +156,22 @@
         <p class="footer-sub">Hecho con &#10084;&#65039; para endulzarte el día</p>
     </div>
 </footer>
+
+<div id="producto-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2 id="modal-titulo" class="modal-title"></h2>
+            <button class="modal-close" onclick="cerrarModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <div class="modal-loading" id="modal-loading">
+                <span class="loading-spinner"></span>
+                <p>Cargando sabores...</p>
+            </div>
+            <div class="sabores-grid" id="sabores-grid"></div>
+        </div>
+    </div>
+</div>
 
 <script src="assets/js/app.js"></script>
 </body>

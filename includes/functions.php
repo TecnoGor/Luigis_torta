@@ -135,6 +135,17 @@ function getProductosBajoStock($limite = 5) {
     );
 }
 
+function getSaboresByProducto($productoId) {
+    return fetchAll(
+        'SELECT * FROM producto_sabores WHERE producto_id = ? ORDER BY orden ASC, nombre ASC',
+        [$productoId]
+    );
+}
+
+function getSabor($id) {
+    return fetchOne('SELECT * FROM producto_sabores WHERE id = ?', [$id]);
+}
+
 function getHistorialInventario($productoId = null, $limit = 50) {
     $sql = 'SELECT h.*, p.nombre as producto_nombre, u.nombre_completo as usuario_nombre 
             FROM historial_inventario h 

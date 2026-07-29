@@ -53,6 +53,20 @@ document.addEventListener('DOMContentLoaded', () => {
             if (buscador.value === '') buscarProductos();
         });
     }
+
+    document.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            const id = card.getAttribute('data-id');
+            if (id) abrirModal(id);
+        });
+    });
+
+    const modal = document.getElementById('producto-modal');
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) cerrarModal();
+        });
+    }
 });
 
 function confirmarEliminar(nombre) {
@@ -73,3 +87,64 @@ function previewImage(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
+function abrirModal(productoId) {
+    const modal = document.getElementById('producto-modal');
+    const titulo = document.getElementById('modal-titulo');
+    const grid = document.getElementById('sabores-grid');
+    const loading = document.getElementById('modal-loading');
+
+    modal.style.display = 'flex';
+    grid.innerHTML = '';
+    loading.style.display = 'block';
+    titulo.textContent = 'Cargando...';
+
+    fetch('ajax/get_sabores.php?producto_id=' + productoId)
+        .then(res => {
+            if (!res.ok) throw new Error('Error al cargar');
+            return res.json();
+        })
+        .then(data => {
+            loading.style.display = 'none';
+            titulo.textContent = data.producto.nombre;
+
+            if (!data.tiene_sabores) {
+                grid.innerHTML = '<div class="modal-sin-sabores"><span>&#127856;</span><p>Este producto no tiene variedades disponibles</p></div>';
+                return;
+            }
+
+            data.sabores.forEach(s => {
+                const card = document.createElement('div');
+                card.className = 'sabor-card';
+
+                const imgHtml = s.imagen
+                    ? '<img src="' + s.imagen + '" alt="' + s.nombre + '">'
+                    : '<div class="sabor-placeholder"><span>&#127856;</span></div>';
+
+                const stockClass = s.stock === 0 ? 'out' : (s.stock_low ? 'low' : '');
+
+                card.innerHTML =
+                    '<div class="sabor-imagen">' + imgHtml + '</div>' +
+                    '<div class="sabor-info">' +
+                        '<div class="sabor-nombre">' + s.nombre + '</div>' +
+                        '<div class="sabor-detalles">' +
+                            '<span class="sabor-precio">' + s.precio + '</span>' +
+                            '<span class="sabor-stock ' + stockClass + '">' + s.stock_label + '</span>' +
+                        '</div>' +
+                    '</div>';
+
+                grid.appendChild(card);
+            });
+        })
+        .catch(err => {
+            loading.style.display = 'none';
+            titulo.textContent = 'Error';
+            grid.innerHTML = '<div class="modal-sin-sabores"><span>&#9888;&#65039;</span><p>No se pudieron cargar los sabores. Intenta de nuevo.</p></div>';
+        });
+}
+
+function cerrarModal() {
+    document.getElementById('producto-modal').style.display = 'none';
+}
+
+
