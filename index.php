@@ -173,6 +173,43 @@
     </div>
 </div>
 
+<div id="chat-widget" class="chat-widget">
+    <div id="chat-panel" class="chat-panel">
+        <div class="chat-header">
+            <div class="chat-header-info">
+                <span class="chat-avatar">&#127856;</span>
+                <div>
+                    <strong><?= SITE_NAME ?></strong>
+                    <span class="chat-status"><span class="chat-status-dot"></span> En línea</span>
+                </div>
+            </div>
+            <button class="chat-close" onclick="ChatCliente.abrirCerrar()" title="Cerrar">&times;</button>
+        </div>
+        <div class="chat-body">
+            <div id="chat-mensajes" class="chat-mensajes"></div>
+            <div id="chat-login" class="chat-login">
+                <span class="chat-login-icon">&#127856;</span>
+                <h3>Hablemos de tu pedido</h3>
+                <p>Cuéntanos tu nombre para iniciar la conversación con nuestro equipo.</p>
+                <input type="text" id="chat-login-nombre" placeholder="Tu nombre" maxlength="150" autocomplete="off">
+                <input type="text" id="chat-login-telefono" placeholder="Teléfono (opcional)" maxlength="50" autocomplete="off">
+                <button id="chat-login-btn" class="btn btn-primary" style="width:100%;">&#9993; Iniciar chat</button>
+                <div id="chat-login-error" class="chat-login-error"></div>
+            </div>
+        </div>
+        <div class="chat-form" id="chat-form">
+            <input type="text" id="chat-input" placeholder="Escribe tu mensaje..." maxlength="2000" autocomplete="off">
+            <button id="chat-send" class="chat-send" title="Enviar">&#10148;</button>
+        </div>
+    </div>
+    <button id="chat-toggle" class="chat-toggle" onclick="ChatCliente.abrirCerrar()" title="Chat con nosotros">
+        <span class="chat-toggle-icon">&#128172;</span>
+        <span class="chat-toggle-close">&times;</span>
+        <span id="chat-unread-badge" class="chat-badge" style="display:none;"></span>
+    </button>
+</div>
+
 <script src="assets/js/app.js"></script>
+<script src="assets/js/chat.js"></script>
 </body>
 </html>

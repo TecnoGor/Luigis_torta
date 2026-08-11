@@ -30,6 +30,7 @@ $bajoStock = getProductosBajoStock(5);
             <a href="productos.php">&#127856; Productos</a>
             <a href="categorias.php">&#128193; Categorías</a>
             <a href="inventario.php">&#128230; Inventario</a>
+            <a href="chat.php">&#128172; Mensajes<?php $chatNoLeidos = getNoLeidosAdminTotal(); if ($chatNoLeidos > 0): ?><span class="badge-chat"><?= $chatNoLeidos ?></span><?php endif; ?></a>
             <a href="../" target="_blank">&#128196; Ver Catálogo</a>
             <a href="logout.php">&#128682; Cerrar Sesión</a>
         </nav>
